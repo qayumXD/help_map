@@ -180,7 +180,7 @@ export default function App() {
     return () => {
       cancelled = true
     }
-  }, [posKey])
+  }, [position])
 
   /* ---------- search ---------- */
 
