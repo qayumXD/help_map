@@ -1,5 +1,6 @@
 ﻿import { APP_REPO } from '../config'
 import { useT } from '../i18n/useT'
+import { useDialog } from '../hooks/useDialog'
 
 interface Props {
   open: boolean
@@ -8,14 +9,17 @@ interface Props {
 
 export default function PrivacyDialog({ open, onClose }: Props) {
   const { t } = useT()
+  const ref = useDialog(open, onClose)
   if (!open) return null
   return (
     <div className="dialog-backdrop" onClick={onClose}>
       <div
+        ref={ref}
         className="dialog"
         role="dialog"
         aria-modal="true"
         aria-labelledby="privacy-title"
+        tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="dialog-head">

@@ -257,6 +257,9 @@ export default function App() {
 
   return (
     <div className={emergency ? 'app app-emergency' : 'app'}>
+      <a className="skip-link" href="#main-content">
+        {t('a11y.skip')}
+      </a>
       <Header
         onPrivacy={() => setPrivacyOpen(true)}
         emergency={emergency}
@@ -328,10 +331,9 @@ export default function App() {
         </div>
       )}
 
-      <main className="content">
+      <main className="content" id="main-content">
         <section
           className={`pane pane-results ${view === 'list' ? '' : 'pane-hidden'}`}
-          aria-hidden={view !== 'list'}
         >
           <ResultsList
             status={status}
@@ -351,7 +353,6 @@ export default function App() {
 
         <section
           className={`pane pane-map ${view === 'map' ? '' : 'pane-hidden'}`}
-          aria-hidden={view !== 'map'}
         >
           <MapView
             position={position}

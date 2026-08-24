@@ -1,5 +1,6 @@
 import { APP_NAME } from '../config'
 import { useT } from '../i18n/useT'
+import { useDialog } from '../hooks/useDialog'
 
 interface Props {
   open: boolean
@@ -8,14 +9,17 @@ interface Props {
 
 export default function OnboardingDialog({ open, onDone }: Props) {
   const { t } = useT()
+  const ref = useDialog(open, onDone)
   if (!open) return null
   return (
     <div className="dialog-backdrop" onClick={onDone}>
       <div
+        ref={ref}
         className="dialog"
         role="dialog"
         aria-modal="true"
         aria-labelledby="onboard-title"
+        tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="logo onboard-logo">

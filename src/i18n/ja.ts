@@ -29,6 +29,7 @@ const ja: Dict = {
   'layers.refresh': '{label}を更新',
 
   'common.dismiss': '閉じる',
+  'a11y.skip': '結果へスキップ',
 
   'info.offline': 'オフラインです。前回保存した結果を表示しています。',
   'info.restored': '前回の検索結果を復元しました。最新データは再検索してください。',

@@ -24,7 +24,7 @@ export default function Header({ onPrivacy, emergency, onToggleEmergency }: Prop
             fill="#fff"
           />
         </svg>
-        <span className="logo-name">HelpMap</span>
+        <h1 className="logo-name">HelpMap</h1>
       </div>
       <p className="tagline">{t('app.tagline')}</p>
       <div className="header-actions">

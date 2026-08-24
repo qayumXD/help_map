@@ -23,7 +23,7 @@ interface Props {
 export default function LayersBar({ chips, onToggle, onRefresh, now }: Props) {
   const { t } = useT()
   return (
-    <div className="layers-row" role="group" aria-label={t('layers.live')}>
+    <div className="layers-row" role="group" aria-label={t('layers.live')} tabIndex={0}>
       <span className="layers-label">{t('layers.live')}</span>
       {LAYERS.map((meta) => {
         const chip = chips[meta.id]

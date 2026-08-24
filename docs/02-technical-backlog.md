@@ -34,11 +34,11 @@ Public instances degraded simultaneously during session testing (502/504).
 - Mid term: nightly self-generated regional snapshots (Overpass → static JSON bundles committed/served as assets) so search works even when Overpass is down; live query remains primary, snapshot is fallback.
 - Long term: own instance (~$20–40/mo VPS) once funded.
 
-### T6 ☐ Accessibility pass (WCAG 2.1 AA basics)
+### T6 ☑ Accessibility pass (WCAG 2.1 AA basics)
 - Label all icon-only buttons (audit `aria-label` coverage) ✓ mostly done
 - Color-contrast audit of chips/badges/banner text (amber-on-cream banner suspect)
 - Keyboard path through card expand/collapse and layers bar
-- Screen-reader smoke test (NVDA/VoiceOver) of search → results → detail flow
+- Screen-reader smoke test (NVDA/VoiceOver) of search → results → detail flow`n`n**Completed 2026-08-24:** all 13 color pairs verified ≥4.5:1 computationally; desktop `aria-hidden` bug fixed (visible pane was hidden from AT); dialogs now trap Escape + manage focus; skip-link, `h1` landmark, keyboard-scrollable chip/layers rows, `prefers-reduced-motion`, 28px refresh targets. **Outstanding:** live NVDA/VoiceOver walkthrough queued for pilot phase (needs real devices).
 
 ---
 

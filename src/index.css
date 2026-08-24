@@ -52,10 +52,28 @@ button {
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
-a:focus-visible {
-  outline: 3px solid rgba(14, 122, 95, 0.45);
+a:focus-visible,
+[tabindex='0']:focus-visible {
+  outline: 3px solid rgba(14, 122, 95, 0.75);
   outline-offset: 1px;
   border-radius: 6px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--surface);
+  color: var(--primary);
+  padding: 10px 18px;
+  border-radius: 0 0 10px 0;
+  z-index: 4000;
+  font-weight: 700;
+  box-shadow: var(--shadow-lg);
+}
+
+.skip-link:focus-visible {
+  left: 0;
 }
 
 .app {
@@ -87,9 +105,11 @@ a:focus-visible {
 }
 
 .logo-name {
+  margin: 0;
   font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .tagline {
@@ -919,6 +939,17 @@ a:focus-visible {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* ---------- Map ---------- */
 
 .hm-map {
@@ -1107,8 +1138,8 @@ a:focus-visible {
 }
 
 .layer-refresh {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;

@@ -29,6 +29,7 @@ const es: Dict = {
   'layers.refresh': 'Actualizar {label}',
 
   'common.dismiss': 'Cerrar',
+  'a11y.skip': 'Saltar a los resultados',
 
   'info.offline': 'Sin conexión — mostrando tus últimos resultados guardados.',
   'info.restored': 'Se restauró tu última búsqueda. Busca de nuevo para datos frescos.',

@@ -21,7 +21,7 @@ export default function FilterChips({
 }: Props) {
   const { t } = useT()
   return (
-    <div className="chips-row" role="group" aria-label={t('chips.label')}>
+    <div className="chips-row" role="group" aria-label={t('chips.label')} tabIndex={0}>
       {CATEGORIES.map((cat) => {
         const isActive = active.has(cat.id)
         const count = counts.get(cat.id) ?? 0

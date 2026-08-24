@@ -27,6 +27,7 @@
   'layers.refresh': 'Refresh {label}',
 
   'common.dismiss': 'Dismiss',
+  'a11y.skip': 'Skip to results',
 
   'info.offline': 'You are offline — showing your last saved results.',
   'info.restored': 'Restored your last search. Search again for fresh results.',
