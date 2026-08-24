@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import type { AlertSeverity, LatLng, Quake, Resource, WeatherAlert } from '../types'
 import { CATEGORY_BY_ID } from '../data/categories'
 import { isActive } from '../services/alerts'
+import { TILE_ATTRIBUTION, TILE_URL } from '../config'
 import { timeAgo } from '../utils/geo'
 
 interface Props {
@@ -125,8 +126,8 @@ export default function MapView({
       attributionControl={true}
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution={TILE_ATTRIBUTION}
+        url={TILE_URL}
       />
       <AutoResize />
       <Follow position={position} />

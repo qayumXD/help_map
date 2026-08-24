@@ -30,3 +30,15 @@ npm run lint     # oxlint
 ```
 
 No backend required — deploys as a static site to Netlify, Vercel, GitHub Pages, etc.
+
+## Documentation
+
+- [Research report](docs/01-research.md) — adoption barriers, data-source policies, satellite access, funding landscape
+- [Technical backlog](docs/02-technical-backlog.md) — prioritized work items (T1–T18)
+- [90-day roadmap](docs/03-roadmap-90day.md) — phases, milestones, funding sequence
+
+## License
+
+- Code: [Apache-2.0](LICENSE)
+- Map data: © OpenStreetMap contributors, [ODbL](https://opendatacommons.org/licenses/odbl/)
+- Weather alerts (NWS) and earthquake data (USGS): US public domain

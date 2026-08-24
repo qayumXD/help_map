@@ -1,4 +1,8 @@
-export default function Header() {
+interface Props {
+  onPrivacy: () => void
+}
+
+export default function Header({ onPrivacy }: Props) {
   return (
     <header className="header">
       <div className="logo">
@@ -17,6 +21,9 @@ export default function Header() {
         <span className="logo-name">HelpMap</span>
       </div>
       <p className="tagline">Free food, shelter, care &amp; support near you</p>
+      <button type="button" className="privacy-link" onClick={onPrivacy}>
+        Privacy
+      </button>
     </header>
   )
 }

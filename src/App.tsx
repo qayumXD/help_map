@@ -11,6 +11,7 @@ import { CACHE_KEYS, loadCache, saveCache } from './utils/cache'
 import { useLiveLayer, useTick } from './hooks/useLiveLayer'
 import type { LayerChip } from './components/LayersBar'
 import Header from './components/Header'
+import PrivacyDialog from './components/PrivacyDialog'
 import SearchBar from './components/SearchBar'
 import FilterChips from './components/FilterChips'
 import LayersBar from './components/LayersBar'
@@ -70,6 +71,7 @@ export default function App() {
     alerts: true,
     quakes: true,
   })
+  const [privacyOpen, setPrivacyOpen] = useState(false)
 
   /* ---------- live hazard layers ---------- */
 
@@ -223,7 +225,8 @@ export default function App() {
 
   return (
     <div className="app">
-      <Header />
+      <Header onPrivacy={() => setPrivacyOpen(true)} />
+      <PrivacyDialog open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
 
       <div className="controls">
         <SearchBar

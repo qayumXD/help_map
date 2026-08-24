@@ -40,6 +40,8 @@ async function fetchEndpoint(endpoint: string, query: string): Promise<OverpassE
   return json.elements ?? []
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
 function toResource(el: OverpassElement): Resource | null {
   const lat = el.lat ?? el.center?.lat
   const lng = el.lon ?? el.center?.lon
@@ -75,10 +77,11 @@ export async function fetchResources(
   const query = buildQuery(point, radiusKm)
   let elements: OverpassElement[] | null = null
   let lastError: unknown = null
-  for (const endpoint of ENDPOINTS) {
+
+  for (let attempt = 0; attempt < ENDPOINTS.length + 1 && elements === null; attempt++) {
+    if (attempt > 0) await sleep(700 + attempt * 900 + Math.random() * 500)
     try {
-      elements = await fetchEndpoint(endpoint, query)
-      break
+      elements = await fetchEndpoint(ENDPOINTS[attempt % ENDPOINTS.length], query)
     } catch (err) {
       lastError = err
     }

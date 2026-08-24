@@ -1,6 +1,6 @@
 import type { LatLng } from '../types'
-
-const NOMINATIM = 'https://nominatim.openstreetmap.org'
+import { NOMINATIM_BASE } from '../config'
+import { withLocalCache } from '../utils/localMemo'
 
 interface NominatimResult {
   lat: string
@@ -10,16 +10,18 @@ interface NominatimResult {
 }
 
 export async function geocodeAddress(query: string): Promise<LatLng & { label: string }> {
-  const url = `${NOMINATIM}/search?q=${encodeURIComponent(query)}&format=jsonv2&limit=1`
-  const res = await fetch(url, { headers: { Accept: 'application/json' } })
-  if (!res.ok) throw new Error(`Geocoding failed (${res.status})`)
-  const results = (await res.json()) as NominatimResult[]
-  if (results.length === 0) throw new Error(`No results found for "${query}"`)
-  return {
-    lat: Number(results[0].lat),
-    lng: Number(results[0].lon),
-    label: shortLabel(results[0]),
-  }
+  return withLocalCache(`geo:${query.trim().toLowerCase()}`, 24 * 3600_000, async () => {
+    const url = `${NOMINATIM_BASE}/search?q=${encodeURIComponent(query)}&format=jsonv2&limit=1`
+    const res = await fetch(url, { headers: { Accept: 'application/json' } })
+    if (!res.ok) throw new Error(`Geocoding failed (${res.status})`)
+    const results = (await res.json()) as NominatimResult[]
+    if (results.length === 0) throw new Error(`No results found for "${query}"`)
+    return {
+      lat: Number(results[0].lat),
+      lng: Number(results[0].lon),
+      label: shortLabel(results[0]),
+    }
+  })
 }
 
 export function currentPosition(): Promise<LatLng> {
@@ -40,17 +42,20 @@ export function currentPosition(): Promise<LatLng> {
   })
 }
 
-export async function reverseLabel(point: LatLng): Promise<string> {
-  try {
-    const res = await fetch(
-      `${NOMINATIM}/reverse?lat=${point.lat}&lon=${point.lng}&format=jsonv2&zoom=14`,
-    )
-    if (!res.ok) return 'your location'
-    const json = (await res.json()) as NominatimResult
-    return json.display_name ? shortLabel(json) : 'your location'
-  } catch {
-    return 'your location'
-  }
+export function reverseLabel(point: LatLng): Promise<string> {
+  const key = `rev:${point.lat.toFixed(3)},${point.lng.toFixed(3)}`
+  return withLocalCache(key, 12 * 3600_000, async () => {
+    try {
+      const res = await fetch(
+        `${NOMINATIM_BASE}/reverse?lat=${point.lat}&lon=${point.lng}&format=jsonv2&zoom=14`,
+      )
+      if (!res.ok) return 'your location'
+      const json = (await res.json()) as NominatimResult
+      return json.display_name ? shortLabel(json) : 'your location'
+    } catch {
+      return 'your location'
+    }
+  })
 }
 
 function shortLabel(result: NominatimResult): string {
