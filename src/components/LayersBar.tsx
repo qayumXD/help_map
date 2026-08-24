@@ -2,6 +2,7 @@
 import { LAYERS } from '../types'
 import type { LayerStatus } from '../hooks/useLiveLayer'
 import { timeAgo } from '../utils/geo'
+import { aqiBand } from '../services/airQuality'
 import { useT } from '../i18n/useT'
 
 export interface LayerChip {
@@ -20,9 +21,18 @@ interface Props {
   now: number
   imageryOn: boolean
   onToggleImagery: () => void
+  aqi?: { usAqi: number } | null
 }
 
-export default function LayersBar({ chips, onToggle, onRefresh, now, imageryOn, onToggleImagery }: Props) {
+export default function LayersBar({
+  chips,
+  onToggle,
+  onRefresh,
+  now,
+  imageryOn,
+  onToggleImagery,
+  aqi,
+}: Props) {
   const { t } = useT()
   return (
     <div className="layers-row" role="group" aria-label={t('layers.live')} tabIndex={0}>
@@ -85,6 +95,18 @@ export default function LayersBar({ chips, onToggle, onRefresh, now, imageryOn, 
         </svg>
         <span>{t('layers.imagery')}</span>
       </button>
+      {aqi && (
+        <span
+          className="layer-chip layer-static aqi-pill"
+          style={{ color: aqiBand(aqi.usAqi).color }}
+          title={`${t('layers.aqi')} · US AQI ${aqi.usAqi} — ${aqiBand(aqi.usAqi).label}`}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <path d="M3 20c3-6 5-8 9-8 3 0 5 1 9-4M12 12v-2m-4 10h8" />
+          </svg>
+          <span>AQI {aqi.usAqi}</span>
+        </span>
+      )}
     </div>
   )
 }

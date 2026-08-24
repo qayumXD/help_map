@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { GlobalEvent, LatLng, LayerId, Quake, Resource, WeatherAlert } from './types'
 import { LAYERS } from './types'
 import { CATEGORIES } from './data/categories'
@@ -7,6 +7,9 @@ import { fetchResources } from './services/overpass'
 import { fetchQuakes } from './services/quakes'
 import { fetchAlerts } from './services/alerts'
 import { fetchGlobalEvents } from './services/eonet'
+import { fetchAirQuality } from './services/airQuality'
+import type { AirQuality } from './services/airQuality'
+import { IMAGERY_DATE } from './config'
 import { annotateResources } from './utils/impact'
 import { getOpenState } from './utils/openingHours'
 import { CACHE_KEYS, loadCache, saveCache } from './utils/cache'
@@ -16,6 +19,8 @@ import type { LayerChip } from './components/LayersBar'
 import Header from './components/Header'
 import PrivacyDialog from './components/PrivacyDialog'
 import OnboardingDialog from './components/OnboardingDialog'
+import StatusDialog from './components/StatusDialog'
+import type { FeedStatus } from './components/StatusDialog'
 import SearchBar from './components/SearchBar'
 import FilterChips from './components/FilterChips'
 import LayersBar from './components/LayersBar'
@@ -74,6 +79,26 @@ export default function App() {
   })
   const [privacyOpen, setPrivacyOpen] = useState(false)
   const [imageryOn, setImageryOn] = useState(false)
+  const [aqi, setAqi] = useState<AirQuality | null>(null)
+  const [showStatus, setShowStatus] = useState(
+    () => typeof window !== 'undefined' && window.location.hash === '#status',
+  )
+
+  useEffect(() => {
+    const onHash = () => setShowStatus(window.location.hash === '#status')
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
+  function toggleStatus() {
+    if (showStatus) {
+      setShowStatus(false)
+      history.replaceState(null, '', window.location.pathname + window.location.search)
+    } else {
+      setShowStatus(true)
+      history.replaceState(null, '', '#status')
+    }
+  }
   const [openOnly, setOpenOnly] = useState(false)
   const [emergency, setEmergency] = useState(
     () => localStorage.getItem('hm:emergency') === '1',
@@ -137,6 +162,25 @@ export default function App() {
 
   const now = useTick(30_000)
   const { t } = useT()
+
+  useEffect(() => {
+    let cancelled = false
+    void Promise.resolve().then(() => {
+      if (cancelled) return
+      if (!position) {
+        setAqi(null)
+        return
+      }
+      fetchAirQuality(position)
+        .then((v) => {
+          if (!cancelled) setAqi(v)
+        })
+        .catch(() => {})
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [posKey])
 
   /* ---------- search ---------- */
 
@@ -274,6 +318,67 @@ export default function App() {
     setLayersOn((prev) => ({ ...prev, [id]: !prev[id] }))
   }, [])
 
+  const statusFeeds: FeedStatus[] = [
+    {
+      name: t('layers.alerts'),
+      state: !layersOn.alerts
+        ? 'off'
+        : alertsLayer.status === 'error'
+          ? 'error'
+          : layerChips.alerts.stale && alertsLayer.updatedAt !== null
+            ? 'stale'
+            : alertsLayer.updatedAt !== null
+              ? 'ok'
+              : 'loading',
+      updatedAt: alertsLayer.updatedAt,
+    },
+    {
+      name: t('layers.quakes'),
+      state: !layersOn.quakes
+        ? 'off'
+        : quakesLayer.status === 'error'
+          ? 'error'
+          : layerChips.quakes.stale && quakesLayer.updatedAt !== null
+            ? 'stale'
+            : quakesLayer.updatedAt !== null
+              ? 'ok'
+              : 'loading',
+      updatedAt: quakesLayer.updatedAt,
+    },
+    {
+      name: t('layers.eonet'),
+      state: !layersOn.eonet
+        ? 'off'
+        : eventsLayer.status === 'error'
+          ? 'error'
+          : layerChips.eonet.stale && eventsLayer.updatedAt !== null
+            ? 'stale'
+            : eventsLayer.updatedAt !== null
+              ? 'ok'
+              : 'loading',
+      updatedAt: eventsLayer.updatedAt,
+    },
+    {
+      name: t('status.imageryFeed'),
+      state: imageryOn ? 'ok' : 'off',
+      updatedAt: null,
+      detail: `VIIRS ${IMAGERY_DATE}`,
+    },
+    {
+      name: t('status.listings'),
+      state:
+        status === 'loading' ? 'loading' : status === 'ready' ? (resources.length > 0 ? 'ok' : 'stale') : 'off',
+      updatedAt: null,
+      detail: locationLabel || undefined,
+    },
+    {
+      name: t('status.airquality'),
+      state: aqi ? 'ok' : position ? 'loading' : 'off',
+      updatedAt: null,
+      detail: aqi ? `US AQI ${aqi.usAqi}` : undefined,
+    },
+  ]
+
   /* ---------- render ---------- */
 
   return (
@@ -283,9 +388,11 @@ export default function App() {
       </a>
       <Header
         onPrivacy={() => setPrivacyOpen(true)}
+        onStatus={toggleStatus}
         emergency={emergency}
         onToggleEmergency={toggleEmergency}
       />
+      <StatusDialog open={showStatus} onClose={toggleStatus} feeds={statusFeeds} />
       <PrivacyDialog open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
       <OnboardingDialog open={showOnboard} onDone={finishOnboarding} />
 
@@ -312,6 +419,7 @@ export default function App() {
               now={now}
               imageryOn={imageryOn}
               onToggleImagery={() => setImageryOn((v) => !v)}
+              aqi={aqi}
               onToggle={toggleLayer}
               onRefresh={(id) => (id === 'quakes' ? quakesLayer.refresh() : alertsLayer.refresh())}
             />

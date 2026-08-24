@@ -11,6 +11,7 @@ import {
   GIBS_IMAGERY_LAYER,
   GIBS_MATRIX_SET,
   GIBS_MAX_NATIVE_ZOOM,
+  IMAGERY_DATE,
   TILE_ATTRIBUTION,
   TILE_URL,
 } from '../config'
@@ -48,13 +49,6 @@ function eventIcon(color: string): L.DivIcon {
     iconAnchor: [7, 7],
   })
 }
-
-const IMAGERY_DATE = (() => {
-  const d = new Date(Date.now() - 86_400_000)
-  const mm = String(d.getMonth() + 1).padStart(2, '0')
-  const dd = String(d.getDate()).padStart(2, '0')
-  return `${d.getFullYear()}-${mm}-${dd}`
-})()
 
 function quakeIcon(mag: number): L.DivIcon {
   const size = Math.round(12 + mag * 3.5)

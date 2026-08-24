@@ -98,6 +98,19 @@ const ja: Dict = {
   'privacy.sources.title': 'データソースとライセンス',
   'privacy.sources.body':
     '地図データ © OpenStreetMap コントリビューター (ODbL)。気象警報は NOAA/NWS、地震データは USGS。有効な場合、衛星画像は NASA EOSDIS GIBS。',
+  'status.title': 'サービス状態',
+  'status.feed': 'フィード',
+  'status.state': '状態',
+  'status.lastCheck': '最終成功',
+  'status.never': 'なし',
+  'status.imageryFeed': '衛星画像',
+  'status.listings': '施設データ(Overpass)',
+  'status.airquality': '大気質',
+  'status.note':
+    '防災フィードはタブを開いている間、自動更新されます。衛星画像はNASA VIIRSの前日のデータです。',
+  'header.status': '状態',
+  'layers.aqi': '大気質',
+
   'privacy.contact': 'ご質問などは GitHub でIssueを開いてください。',
 }
 

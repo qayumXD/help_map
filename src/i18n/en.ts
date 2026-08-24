@@ -97,6 +97,19 @@ export const en = {
   'privacy.sources.title': 'Data sources & licenses',
   'privacy.sources.body':
     'Map data © OpenStreetMap contributors (ODbL). Weather alerts via NOAA/NWS. Earthquake data via USGS. Satellite imagery via NASA EOSDIS GIBS when enabled.',
+  'status.title': 'Service status',
+  'status.feed': 'Feed',
+  'status.state': 'State',
+  'status.lastCheck': 'Last success',
+  'status.never': 'never',
+  'status.imageryFeed': 'Satellite imagery',
+  'status.listings': 'Listings (Overpass)',
+  'status.airquality': 'Air quality',
+  'status.note':
+    'Hazard feeds refresh automatically while the tab is open. Satellite imagery shows the previous day of NASA VIIRS data.',
+  'header.status': 'Status',
+  'layers.aqi': 'Air quality',
+
   'privacy.contact': 'Questions? Open an issue on GitHub.',
 }
 

@@ -3,11 +3,12 @@ import { useT } from '../i18n/useT'
 
 interface Props {
   onPrivacy: () => void
+  onStatus: () => void
   emergency: boolean
   onToggleEmergency: () => void
 }
 
-export default function Header({ onPrivacy, emergency, onToggleEmergency }: Props) {
+export default function Header({ onPrivacy, onStatus, emergency, onToggleEmergency }: Props) {
   const { t } = useT()
   return (
     <header className="header">
@@ -42,6 +43,9 @@ export default function Header({ onPrivacy, emergency, onToggleEmergency }: Prop
           </svg>
         </button>
         <LanguageSwitcher />
+        <button type="button" className="privacy-link" onClick={onStatus}>
+          {t('header.status')}
+        </button>
         <button type="button" className="privacy-link" onClick={onPrivacy}>
           {t('header.privacy')}
         </button>

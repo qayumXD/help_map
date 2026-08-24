@@ -100,6 +100,19 @@ const es: Dict = {
   'privacy.sources.title': 'Fuentes de datos y licencias',
   'privacy.sources.body':
     'Datos del mapa © colaboradores de OpenStreetMap (ODbL). Alertas meteorológicas vía NOAA/NWS. Datos sísmicos vía USGS. Imágenes satelitales vía NASA EOSDIS GIBS cuando están activadas.',
+  'status.title': 'Estado del servicio',
+  'status.feed': 'Fuente',
+  'status.state': 'Estado',
+  'status.lastCheck': 'Último éxito',
+  'status.never': 'nunca',
+  'status.imageryFeed': 'Imágenes satelitales',
+  'status.listings': 'Listados (Overpass)',
+  'status.airquality': 'Calidad del aire',
+  'status.note':
+    'Las fuentes de peligros se actualizan automáticamente mientras la pestaña esté abierta. Las imágenes satelitales muestran los datos del día anterior de NASA VIIRS.',
+  'header.status': 'Estado',
+  'layers.aqi': 'Calidad del aire',
+
   'privacy.contact': '¿Preguntas? Abre un issue en GitHub.',
 }
 

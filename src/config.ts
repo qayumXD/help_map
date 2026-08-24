@@ -17,3 +17,11 @@ export const GIBS_BASE = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best'
 export const GIBS_IMAGERY_LAYER = 'VIIRS_SNPP_CorrectedReflectance_TrueColor'
 export const GIBS_MATRIX_SET = 'GoogleMapsCompatible_Level9'
 export const GIBS_MAX_NATIVE_ZOOM = 9
+
+/** Imagery date: yesterday (today's global mosaic is incomplete until end of day). */
+export const IMAGERY_DATE = (() => {
+  const d = new Date(Date.now() - 86_400_000)
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  const dd = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}-${mm}-${dd}`
+})()
