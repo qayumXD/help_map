@@ -1,6 +1,7 @@
 ﻿import type { Resource } from '../types'
 import { CATEGORY_BY_ID } from '../data/categories'
 import { formatDistance, walkMinutes } from '../utils/geo'
+import { getOpenState } from '../utils/openingHours'
 import { useT } from '../i18n/useT'
 import CategoryIcon from './CategoryIcon'
 
@@ -22,6 +23,7 @@ export default function ResourceCard({ resource: r, active, onToggle, onShowOnMa
   const secondary = CATEGORY_BY_ID.get(r.categories[1])
 
   const siteLabel = r.website?.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
+  const open = getOpenState(r.openingHours)
   const prefix = REPORT_PREFIX[locale] ?? REPORT_PREFIX.en
   const noteUrl = `https://www.openstreetmap.org/note/new#map=18/${r.lat.toFixed(5)}/${r.lng.toFixed(5)}&text=${encodeURIComponent(
     prefix + r.name,
@@ -39,6 +41,11 @@ export default function ResourceCard({ resource: r, active, onToggle, onShowOnMa
             {primary && <span className="cat-badge">{t(`cat.${primary.id}`)}</span>}
             {secondary && (
               <span className="cat-badge cat-badge-soft">{t(`cat.${secondary.id}`)}</span>
+            )}
+            {open && (
+              <span className={`open-pill ${open === 'open' ? 'open-yes' : 'open-no'}`}>
+                {open === 'open' ? t('card.open') : t('card.closed')}
+              </span>
             )}
           </span>
         </span>
@@ -91,14 +98,29 @@ export default function ResourceCard({ resource: r, active, onToggle, onShowOnMa
             )}
           </dl>
           <div className="card-actions">
-            <a
-              className="btn-directions"
-              href={`https://www.google.com/maps/dir/?api=1&destination=${r.lat},${r.lng}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t('detail.directions')}
-            </a>
+            <div className="dir-group" role="group" aria-label={t('detail.directions')}>
+              <a
+                href={`https://www.google.com/maps/dir/?api=1&destination=${r.lat},${r.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Google
+              </a>
+              <a
+                href={`https://maps.apple.com/?daddr=${r.lat},${r.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Apple
+              </a>
+              <a
+                href={`https://www.openstreetmap.org/directions?to=${r.lat}%2C${r.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                OSM
+              </a>
+            </div>
             <button type="button" className="btn-ghost" onClick={onShowOnMap}>
               {t('detail.showMap')}
             </button>

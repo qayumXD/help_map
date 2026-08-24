@@ -7,9 +7,18 @@ interface Props {
   counts: Map<string, number>
   total: number
   onToggle: (id: string) => void
+  openOnly: boolean
+  onToggleOpen: () => void
 }
 
-export default function FilterChips({ active, counts, total, onToggle }: Props) {
+export default function FilterChips({
+  active,
+  counts,
+  total,
+  onToggle,
+  openOnly,
+  onToggleOpen,
+}: Props) {
   const { t } = useT()
   return (
     <div className="chips-row" role="group" aria-label={t('chips.label')}>
@@ -30,6 +39,19 @@ export default function FilterChips({ active, counts, total, onToggle }: Props) 
           </button>
         )
       })}
+      <button
+        type="button"
+        className={`chip ${openOnly ? 'chip-active' : ''}`}
+        style={openOnly ? { ['--chip' as string]: '#2fae6e' } : undefined}
+        onClick={onToggleOpen}
+        aria-pressed={openOnly}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3 2" />
+        </svg>
+        <span>{t('chips.openNow')}</span>
+      </button>
       <span className="chips-total" aria-live="polite">
         {t('chips.shown', { total })}
       </span>

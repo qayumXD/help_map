@@ -55,19 +55,19 @@ Public instances degraded simultaneously during session testing (502/504).
 - Primary action: deep-link OSM note at exact location — `https://www.openstreetmap.org/note/new#lat=&lon=&text=...` pre-filled (no backend needed; improvements flow back into shared data commons).
 - Secondary (later, needs tiny serverless): internal report queue for partner moderation (see T15).
 
-### T9 ☐ Open-now status
+### T9 ☑ Open-now status
 - Parse `opening_hours` (use `opening_hours` npm lib or simplified parser for common patterns).
 - Card badge: "Open now" / "Closed · opens Tue 09:00" / unknown = silent.
 - Filter chip: "Open now".
 
-### T10 ☐ Directions options
+### T10 ☑ Directions options
 - Google (current) + Apple Maps (`maps.apple.com/?daddr=`) + OSM (`openstreetmap.org/directions?to=`) chooser — respects users without Google accounts.
 
-### T11 ☐ Emergency mode toggle
+### T11 ☑ Emergency mode toggle
 - Large-text/high-contrast stylesheet variant (CSS custom props swap), persistent across visits, prominent on mobile.
 - Reduces chrome: hides tagline/layers, enlarges touch targets.
 
-### T12 ☐ First-run framing
+### T12 ☑ First-run framing
 - One-screen explainer: what HelpMap is, that it's free, no account, location stays private. Shown once (localStorage flag), skippable.
 
 ---

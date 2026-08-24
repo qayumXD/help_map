@@ -18,6 +18,7 @@
 
   'chips.label': 'Filter by category',
   'chips.shown': '{total} shown',
+  'chips.openNow': 'Open now',
 
   'layers.live': 'Live',
   'layers.alerts': 'Weather alerts',
@@ -54,6 +55,17 @@
   'card.minWalk': '{m} min walk',
   'card.affected': 'May be affected:',
   'card.report': 'Report a problem',
+  'card.open': 'Open',
+  'card.closed': 'Closed',
+
+  'mode.toggle': 'Toggle high-visibility mode',
+
+  'onboard.title': 'Welcome to HelpMap',
+  'onboard.p1':
+    'Find free food, shelter, health care and community services near you — completely free, no account needed.',
+  'onboard.p2':
+    'Your location stays on your device. Listings come from OpenStreetMap and public safety feeds.',
+  'onboard.cta': 'Get started',
 
   'detail.address': 'Address',
   'detail.hours': 'Hours',

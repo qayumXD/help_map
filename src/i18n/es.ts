@@ -19,6 +19,7 @@ const es: Dict = {
   'cat.community': 'Comunidad y Wi-Fi',
 
   'chips.label': 'Filtrar por categoría',
+  'chips.openNow': 'Abiertos ahora',
   'chips.shown': '{total} mostrados',
 
   'layers.live': 'En vivo',
@@ -57,6 +58,17 @@ const es: Dict = {
   'card.minWalk': '{m} min a pie',
   'card.affected': 'Podría estar afectado:',
   'card.report': 'Informar de un problema',
+  'card.open': 'Abierto',
+  'card.closed': 'Cerrado',
+
+  'mode.toggle': 'Activar vista de alto contraste',
+
+  'onboard.title': 'Bienvenido a HelpMap',
+  'onboard.p1':
+    'Encuentra comida, refugio, atención médica y servicios comunitarios gratuitos cerca de ti — totalmente gratis, sin cuenta.',
+  'onboard.p2':
+    'Tu ubicación permanece en tu dispositivo. Los datos provienen de OpenStreetMap y fuentes públicas de emergencias.',
+  'onboard.cta': 'Comenzar',
 
   'detail.address': 'Dirección',
   'detail.hours': 'Horario',

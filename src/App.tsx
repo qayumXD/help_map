@@ -7,12 +7,14 @@ import { fetchResources } from './services/overpass'
 import { fetchQuakes } from './services/quakes'
 import { fetchAlerts } from './services/alerts'
 import { annotateResources } from './utils/impact'
+import { getOpenState } from './utils/openingHours'
 import { CACHE_KEYS, loadCache, saveCache } from './utils/cache'
 import { useLiveLayer, useTick } from './hooks/useLiveLayer'
 import { useT } from './i18n/useT'
 import type { LayerChip } from './components/LayersBar'
 import Header from './components/Header'
 import PrivacyDialog from './components/PrivacyDialog'
+import OnboardingDialog from './components/OnboardingDialog'
 import SearchBar from './components/SearchBar'
 import FilterChips from './components/FilterChips'
 import LayersBar from './components/LayersBar'
@@ -69,6 +71,38 @@ export default function App() {
     quakes: true,
   })
   const [privacyOpen, setPrivacyOpen] = useState(false)
+  const [openOnly, setOpenOnly] = useState(false)
+  const [emergency, setEmergency] = useState(
+    () => localStorage.getItem('hm:emergency') === '1',
+  )
+  const [showOnboard, setShowOnboard] = useState(() => {
+    try {
+      return localStorage.getItem('hm:onboarded') !== '1'
+    } catch {
+      return true
+    }
+  })
+
+  function toggleEmergency() {
+    setEmergency((prev) => {
+      const next = !prev
+      try {
+        localStorage.setItem('hm:emergency', next ? '1' : '0')
+      } catch {
+        /* storage unavailable */
+      }
+      return next
+    })
+  }
+
+  function finishOnboarding() {
+    setShowOnboard(false)
+    try {
+      localStorage.setItem('hm:onboarded', '1')
+    } catch {
+      /* storage unavailable */
+    }
+  }
 
   /* ---------- live hazard layers ---------- */
 
@@ -163,8 +197,13 @@ export default function App() {
   /* ---------- derived data ---------- */
 
   const filtered = useMemo(
-    () => resources.filter((r) => r.categories.some((c) => activeCats.has(c))),
-    [resources, activeCats],
+    () =>
+      resources.filter(
+        (r) =>
+          r.categories.some((c) => activeCats.has(c)) &&
+          (!openOnly || getOpenState(r.openingHours) !== 'closed'),
+      ),
+    [resources, activeCats, openOnly],
   )
 
   const annotated = useMemo(
@@ -217,9 +256,14 @@ export default function App() {
   /* ---------- render ---------- */
 
   return (
-    <div className="app">
-      <Header onPrivacy={() => setPrivacyOpen(true)} />
+    <div className={emergency ? 'app app-emergency' : 'app'}>
+      <Header
+        onPrivacy={() => setPrivacyOpen(true)}
+        emergency={emergency}
+        onToggleEmergency={toggleEmergency}
+      />
       <PrivacyDialog open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
+      <OnboardingDialog open={showOnboard} onDone={finishOnboarding} />
 
       <div className="controls">
         <SearchBar
@@ -236,6 +280,8 @@ export default function App() {
               counts={counts}
               total={annotated.length}
               onToggle={toggleCat}
+              openOnly={openOnly}
+              onToggleOpen={() => setOpenOnly((v) => !v)}
             />
             <LayersBar
               chips={layerChips}

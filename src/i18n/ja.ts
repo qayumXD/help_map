@@ -19,6 +19,7 @@ const ja: Dict = {
   'cat.community': 'コミュニティ施設・Wi-Fi',
 
   'chips.label': 'カテゴリで絞り込む',
+  'chips.openNow': '営業中のみ',
   'chips.shown': '{total} 件表示中',
 
   'layers.live': 'ライブ',
@@ -55,6 +56,17 @@ const ja: Dict = {
   'card.minWalk': '徒歩 {m} 分',
   'card.affected': '影響を受ける可能性:',
   'card.report': '問題を報告',
+  'card.open': '営業中',
+  'card.closed': '営業時間外',
+
+  'mode.toggle': '見やすい表示を切り替える',
+
+  'onboard.title': 'HelpMap へようこそ',
+  'onboard.p1':
+    '近くの無料の食事・宿泊・医療・生活支援施設を探せます。完全無料、アカウント登録も不要です。',
+  'onboard.p2':
+    '位置情報は端末の外に出ません。データは OpenStreetMap と公共の防災フィードから提供されています。',
+  'onboard.cta': 'はじめる',
 
   'detail.address': '住所',
   'detail.hours': '営業時間',
