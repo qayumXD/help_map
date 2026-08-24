@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+﻿import { useEffect, useMemo } from 'react'
 import { MapContainer, Marker, Polygon, Popup, TileLayer, Tooltip, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -7,6 +7,7 @@ import { CATEGORY_BY_ID } from '../data/categories'
 import { isActive } from '../services/alerts'
 import { TILE_ATTRIBUTION, TILE_URL } from '../config'
 import { timeAgo } from '../utils/geo'
+import { useT } from '../i18n/useT'
 
 interface Props {
   position: LatLng | null
@@ -108,11 +109,12 @@ export default function MapView({
   )
   const visibleQuakes = showQuakes ? quakes : []
   const activeResource = resources.find((r) => r.id === activeId)
+  const { t } = useT()
 
   if (!position) {
     return (
       <div className="map-placeholder">
-        <p>Search or share your location to see the map.</p>
+        <p>{t('map.placeholder')}</p>
       </div>
     )
   }
@@ -171,7 +173,7 @@ export default function MapView({
               <>
                 <br />
                 <a href={q.url} target="_blank" rel="noopener noreferrer">
-                  Details on USGS
+                  {t('quake.details')}
                 </a>
               </>
             )}

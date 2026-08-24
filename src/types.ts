@@ -3,9 +3,10 @@ export interface LatLng {
   lng: number
 }
 
+export type CatId = 'food' | 'shelter' | 'health' | 'hygiene' | 'water' | 'community'
+
 export interface Category {
-  id: string
-  label: string
+  id: CatId
   color: string
   matches: (tags: Record<string, string>) => boolean
 }
@@ -13,7 +14,7 @@ export interface Category {
 export interface Resource {
   id: string
   name: string
-  categories: string[]
+  categories: CatId[]
   lat: number
   lng: number
   distanceM: number
@@ -54,11 +55,10 @@ export type LayerId = 'quakes' | 'alerts'
 
 export interface LayerMeta {
   id: LayerId
-  label: string
   refreshMs: number
 }
 
 export const LAYERS: LayerMeta[] = [
-  { id: 'alerts', label: 'Weather alerts', refreshMs: 5 * 60_000 },
-  { id: 'quakes', label: 'Earthquakes', refreshMs: 10 * 60_000 },
+  { id: 'alerts', refreshMs: 5 * 60_000 },
+  { id: 'quakes', refreshMs: 10 * 60_000 },
 ]

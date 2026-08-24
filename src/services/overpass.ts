@@ -1,5 +1,6 @@
 import type { LatLng, Resource } from '../types'
-import { categorize, CATEGORY_BY_ID } from '../data/categories'
+import { categorize } from '../data/categories'
+import { en } from '../i18n/en'
 import { haversineM } from '../utils/geo'
 
 const ENDPOINTS = [
@@ -57,7 +58,10 @@ function toResource(el: OverpassElement): Resource | null {
   return {
     id: `${el.type}/${el.id}`,
     name:
-      tags.name ?? tags.operator ?? CATEGORY_BY_ID.get(categories[0])?.label ?? 'Unnamed place',
+      tags.name ??
+      tags.operator ??
+      en[`cat.${categories[0]}` as keyof typeof en] ??
+      'Unnamed place',
     categories,
     lat,
     lng,

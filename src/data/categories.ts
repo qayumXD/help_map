@@ -1,4 +1,4 @@
-import type { Category } from '../types'
+import type { CatId, Category } from '../types'
 
 /** Food-assistance venue names often missing dedicated OSM tags (esp. Japan). */
 export const FOOD_TEXT =
@@ -7,7 +7,6 @@ export const FOOD_TEXT =
 export const CATEGORIES: Category[] = [
   {
     id: 'food',
-    label: 'Food & Meals',
     color: '#e07b00',
     matches: (t) =>
       t.amenity === 'food_bank' ||
@@ -18,13 +17,11 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'shelter',
-    label: 'Shelter',
     color: '#7a4fd0',
     matches: (t) => t.amenity === 'shelter' || t.social_facility === 'homeless_shelter',
   },
   {
     id: 'health',
-    label: 'Health',
     color: '#d23b57',
     matches: (t) =>
       t.amenity === 'clinic' ||
@@ -33,20 +30,17 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'hygiene',
-    label: 'Hygiene',
     color: '#1f8fce',
     matches: (t) =>
       t.amenity === 'toilets' || t.amenity === 'shower' || t.amenity === 'public_bath',
   },
   {
     id: 'water',
-    label: 'Water',
     color: '#0aa2c0',
     matches: (t) => t.amenity === 'drinking_water',
   },
   {
     id: 'community',
-    label: 'Community & Wi-Fi',
     color: '#0e7a5f',
     matches: (t) =>
       t.amenity === 'library' ||
@@ -56,6 +50,6 @@ export const CATEGORIES: Category[] = [
 
 export const CATEGORY_BY_ID = new Map(CATEGORIES.map((c) => [c.id, c]))
 
-export function categorize(tags: Record<string, string>): string[] {
+export function categorize(tags: Record<string, string>): CatId[] {
   return CATEGORIES.filter((c) => c.matches(tags)).map((c) => c.id)
 }

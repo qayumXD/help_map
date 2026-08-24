@@ -102,7 +102,6 @@ a:focus-visible {
 }
 
 .privacy-link {
-  margin-left: auto;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
@@ -114,6 +113,33 @@ a:focus-visible {
 .privacy-link:hover {
   background: var(--bg);
   color: var(--primary);
+}
+
+.header-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.lang-switch select {
+  font: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 6px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 /* ---------- Dialogs ---------- */
@@ -665,6 +691,19 @@ a:focus-visible {
 .btn-ghost:hover {
   border-color: var(--primary);
   color: var(--primary);
+}
+
+.report-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.report-link:hover {
+  color: var(--danger-ink);
+  text-decoration: underline;
 }
 
 /* ---------- Idle / empty states ---------- */

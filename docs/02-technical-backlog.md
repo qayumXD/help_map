@@ -8,21 +8,21 @@ _Status legend: ☐ open · ◐ in progress · ☑ done_
 ## P0 — Correctness, compliance, trust foundations
 _Blockers for any public/funder-facing deployment._
 
-### T1 ☐ Add LICENSE + attribution compliance
+### T1 ☑ Add LICENSE + attribution compliance
 - Choose code license (MIT or Apache-2.0; Apache preferred if seeking institutional adoption — explicit patent grant).
 - Data notice: OSM data under ODbL (share-alike applies to derived databases, not our code license).
 - Verify visible OSM attribution on map (exists) + add contact email to repo/site per tile policy recommendation.
 
-### T2 ☐ Privacy statement (in-app page)
+### T2 ☑ Privacy statement (in-app page)
 Document the architecture's privacy story: location used on-device only; geocoding queries send place text to Nominatim; hazard feeds receive lat/lng-rounded coordinates (already `.toFixed(4)` ≈ 11 m); localStorage keys list (`hm:search`, `hm:resources`, `hm:quakes`, `hm:alerts`); no analytics/cookies today.
 
-### T3 ◐ Basemap abstraction (tile provider switchable)
+### T3 ☑ Basemap abstraction (tile provider switchable)
 Current hard dependency: `tile.openstreetmap.org` (policy allows but discourages production reliance; blockable without notice).
 - Extract tile URL into config (`TILE_PROVIDERS` map: osm / carto / protomaps-selfhost…).
 - Env-driven default; runtime fallback if tiles 4xx/403.
 - Keep SW cache policy per provider.
 
-### T4 ◐ Geocoder abstraction
+### T4 ☑ Geocoder abstraction
 Nominatim policy requires swappability without app update.
 - Interface: `geocode(query) → {lat,lng,label}` + `reverse(point)` behind `services/geocode.ts` facade (partially exists).
 - Add response caching layer (localStorage TTL 24 h) — also satisfies "results must be cached" clause.
@@ -44,13 +44,13 @@ Public instances degraded simultaneously during session testing (502/504).
 
 ## P1 — Field-ready UX
 
-### T7 ☐ i18n scaffold (EN + 日本語 first)
+### T7 ☑ i18n scaffold (EN + 日本語 first)
 - Library decision: `i18next` (+react-i18next) vs lightweight context dictionary (~30 strings today). Recommend i18next for plural/date handling growth.
 - Translate: header/tagline, categories, filters, banners, empty states, buttons, coverage note.
 - Language switcher in header; `<html lang>` sync; persist choice.
 - Japanese terms: フードバンク, 炊き出し, 宿泊支援 etc. — copy review by native speaker before pilot.
 
-### T8 ☐ Per-listing issue reporting
+### T8 ☑ Per-listing issue reporting
 - Button on expanded card: "Report a problem".
 - Primary action: deep-link OSM note at exact location — `https://www.openstreetmap.org/note/new#lat=&lon=&text=...` pre-filled (no backend needed; improvements flow back into shared data commons).
 - Secondary (later, needs tiny serverless): internal report queue for partner moderation (see T15).
@@ -104,5 +104,5 @@ Priority order: GDACS global alerts → healthsites.io health facilities → Ope
 - **Stack:** Vite + React 19 + TS strict, react-leaflet v5 (React 19 compatible), vite-plugin-pwa (Workbox generateSW), oxlint. No backend today.
 - **State:** single-file App orchestration; `useLiveLayer` hook owns fetch/cache/staleness per hazard feed (visibility-aware auto-refresh; localStorage hydration on first enable).
 - **Caching layers:** Workbox runtime caches (tiles CacheFirst 14d; APIs NetworkFirst) + localStorage app-level snapshots. Viewed-tile caching complies with OSMF policy; **never add prefetch/offline-region downloads while using OSMF tiles** (prohibited) — offline regions only legal after switching to self-hosted/provider vector tiles.
-- **Known sharp edges:** Overpass name-regex queries can take down both endpoints — never reintroduce unconstrained regex scans; NWS rejects undocumented params (`limit`) — test contract changes live; react-leaflet v5 needs `@types/leaflet`.
+- **Tooling hazard:** NEVER edit files via PowerShell Get-Content/Set-Content on this machine — it corrupts UTF-8 (mojibake). Use agent Write/Edit tools or explicit .NET UTF-8 APIs only.`n- **Known sharp edges:** Overpass name-regex queries can take down both endpoints — never reintroduce unconstrained regex scans; NWS rejects undocumented params (`limit`) — test contract changes live; react-leaflet v5 needs `@types/leaflet`.
 - **Deploy target:** static (Netlify/Vercel/Pages). Remote: `git@github.com:qayumXD/help_map.git` over `ssh.github.com:443` (ISP blocks port 22 — remote URL already configured accordingly).

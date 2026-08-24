@@ -1,4 +1,5 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
+import { useT } from '../i18n/useT'
 
 interface Props {
   radiusKm: number
@@ -17,6 +18,7 @@ export default function SearchBar({
   locating,
   onSubmit,
 }: Props) {
+  const { t } = useT()
   const [query, setQuery] = useState('')
 
   return (
@@ -37,8 +39,8 @@ export default function SearchBar({
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Enter a city or address…"
-          aria-label="Search for a location"
+          placeholder={t('search.placeholder')}
+          aria-label={t('search.placeholder')}
           enterKeyHint="search"
         />
         {query.length > 0 && (
@@ -46,13 +48,13 @@ export default function SearchBar({
             type="button"
             className="search-clear"
             onClick={() => setQuery('')}
-            aria-label="Clear search"
+            aria-label={t('search.clear')}
           >
             ×
           </button>
         )}
         <button type="submit" className="btn-search" disabled={locating}>
-          Search
+          {t('search.submit')}
         </button>
       </form>
 
@@ -65,7 +67,7 @@ export default function SearchBar({
         >
           {locating ? (
             <>
-              <span className="spinner" aria-hidden="true" /> Locating…
+              <span className="spinner" aria-hidden="true" /> {t('search.locating')}
             </>
           ) : (
             <>
@@ -73,12 +75,12 @@ export default function SearchBar({
                 <circle cx="12" cy="12" r="3" />
                 <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
               </svg>
-              Use my location
+              {t('search.locate')}
             </>
           )}
         </button>
         <label className="radius-select">
-          Within
+          {t('search.within')}
           <select
             value={radiusKm}
             onChange={(e) => onRadiusChange(Number(e.target.value))}

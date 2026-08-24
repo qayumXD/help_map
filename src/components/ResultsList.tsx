@@ -1,9 +1,10 @@
-import type { LatLng, Resource } from '../types'
+﻿import type { Resource } from '../types'
+import type { LatLng } from '../types'
+import { useT } from '../i18n/useT'
 import ResourceCard from './ResourceCard'
 
 interface Props {
   status: 'idle' | 'loading' | 'ready'
-  notice: string | null
   resources: Resource[]
   activeId: string | null
   onSelect: (id: string) => void
@@ -14,19 +15,25 @@ interface Props {
   foodMissing?: boolean
 }
 
-function CoverageNote({ position, foodMissing }: { position?: LatLng | null; foodMissing?: boolean }) {
+function CoverageNote({
+  position,
+  foodMissing,
+}: {
+  position?: LatLng | null
+  foodMissing?: boolean
+}) {
+  const { t } = useT()
   const mapUrl = position
     ? `https://www.openstreetmap.org/#map=15/${position.lat.toFixed(4)}/${position.lng.toFixed(4)}`
     : 'https://www.openstreetmap.org/'
   return (
     <p className="coverage-note">
-      Coverage depends on OpenStreetMap contributors and varies by region
-      {foodMissing ? ' — free-food services are especially under-mapped here' : ''}. Know a
-      missing place?{' '}
+      {t('coverage.body')}
+      {foodMissing ? t('coverage.bodyFood') : ''}.{' '}
       <a href={mapUrl} target="_blank" rel="noopener noreferrer">
-        Add it on OpenStreetMap
-      </a>{' '}
-      and it will appear here within minutes.
+        {t('coverage.link')}
+      </a>
+      {t('coverage.suffix')}
     </p>
   )
 }
@@ -43,7 +50,6 @@ function Skeletons() {
 
 export default function ResultsList({
   status,
-  notice,
   resources,
   activeId,
   onSelect,
@@ -53,6 +59,8 @@ export default function ResultsList({
   position,
   foodMissing,
 }: Props) {
+  const { t } = useT()
+
   if (status === 'idle') {
     return (
       <div className="idle">
@@ -60,14 +68,12 @@ export default function ResultsList({
           <path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z" />
           <circle cx="12" cy="10" r="2.5" />
         </svg>
-        <h2>Find free help near you</h2>
-        <p>
-          Food banks, shelters, clinics, showers, drinking water and community spaces — all in one map. Your location never leaves your device.
-        </p>
+        <h2>{t('idle.title')}</h2>
+        <p>{t('idle.body')}</p>
         <button type="button" className="btn-primary btn-lg" onClick={onLocate}>
-          Use my location
+          {t('idle.cta')}
         </button>
-        <p className="idle-hint">…or search for a city above.</p>
+        <p className="idle-hint">{t('idle.hint')}</p>
       </div>
     )
   }
@@ -75,7 +81,7 @@ export default function ResultsList({
   if (status === 'loading') {
     return (
       <>
-        <p className="results-count">Searching near {locationLabel || 'you'}…</p>
+        <p className="results-count">{t('results.searching', { place: locationLabel || t('results.placeFallback') })}</p>
         <Skeletons />
       </>
     )
@@ -84,8 +90,8 @@ export default function ResultsList({
   if (resources.length === 0) {
     return (
       <div className="idle">
-        <h2>No results here</h2>
-        <p>{notice ?? 'Try widening the radius or turning filters back on.'}</p>
+        <h2>{t('results.noneTitle')}</h2>
+        <p>{t('results.noneBody')}</p>
         <CoverageNote position={position} foodMissing={foodMissing} />
       </div>
     )
@@ -94,8 +100,9 @@ export default function ResultsList({
   return (
     <>
       <p className="results-count" aria-live="polite">
-        {resources.length} place{resources.length === 1 ? '' : 's'} near{' '}
-        <strong>{locationLabel || 'you'}</strong> · closest first
+        {t('results.count', { n: resources.length, place: locationLabel || t('results.placeFallback') })}
+        {' Â· '}
+        {t('results.closest')}
       </p>
       <div className="cards">
         {resources.map((r) => (

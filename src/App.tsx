@@ -9,6 +9,7 @@ import { fetchAlerts } from './services/alerts'
 import { annotateResources } from './utils/impact'
 import { CACHE_KEYS, loadCache, saveCache } from './utils/cache'
 import { useLiveLayer, useTick } from './hooks/useLiveLayer'
+import { useT } from './i18n/useT'
 import type { LayerChip } from './components/LayersBar'
 import Header from './components/Header'
 import PrivacyDialog from './components/PrivacyDialog'
@@ -56,13 +57,9 @@ export default function App() {
   const [resources, setResources] = useState<Resource[]>(initial?.resources ?? [])
   const [status, setStatus] = useState<Status>(initial ? 'ready' : 'idle')
   const [error, setError] = useState<string | null>(null)
-  const [notice, setNotice] = useState<string | null>(null)
-  const [info, setInfo] = useState<string | null>(() =>
-    initial
-      ? navigator.onLine === false
-        ? 'You are offline — showing your last saved results.'
-        : 'Restored your last search. Search again for fresh results.'
-      : null,
+  type InfoToken = 'offline' | 'restored'
+  const [info, setInfo] = useState<InfoToken | null>(() =>
+    initial ? (navigator.onLine === false ? 'offline' : 'restored') : null,
   )
   const [activeId, setActiveId] = useState<string | null>(null)
   const [view, setView] = useState<'list' | 'map'>('list')
@@ -94,6 +91,7 @@ export default function App() {
   })
 
   const now = useTick(30_000)
+  const { t } = useT()
 
   /* ---------- search ---------- */
 
@@ -110,11 +108,6 @@ export default function App() {
       setStatus('ready')
       saveCache(CACHE_KEYS.search, { point, label, radiusKm: km } satisfies SavedSearch)
       saveCache(CACHE_KEYS.resources, rs)
-      setNotice(
-        rs.length === 0
-          ? `Nothing found within ${km} km. Try a wider radius or a different area.`
-          : null,
-      )
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong — try again')
       setStatus((s) => (resources.length > 0 ? 'ready' : s))
@@ -257,7 +250,7 @@ export default function App() {
       {error && (
         <div className="banner banner-error" role="alert">
           <span>{error}</span>
-          <button type="button" onClick={() => setError(null)} aria-label="Dismiss error">
+          <button type="button" onClick={() => setError(null)} aria-label={t('common.dismiss')}>
             ×
           </button>
         </div>
@@ -265,8 +258,8 @@ export default function App() {
 
       {info && (
         <div className="banner banner-info">
-          <span>{info}</span>
-          <button type="button" onClick={() => setInfo(null)} aria-label="Dismiss">
+          <span>{info === 'offline' ? t('info.offline') : t('info.restored')}</span>
+          <button type="button" onClick={() => setInfo(null)} aria-label={t('common.dismiss')}>
             ×
           </button>
         </div>
@@ -278,11 +271,12 @@ export default function App() {
             <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
             <path d="M12 9v4M12 17h.01" />
           </svg>
-          <span>
-            <strong>{affectedCount}</strong> place{affectedCount === 1 ? '' : 's'} may be
-            affected by active hazards — see the warning badges on their cards.
-          </span>
-          <button type="button" onClick={() => setLayersOn({ alerts: false, quakes: false })} aria-label="Dismiss warning">
+          <span>{t('warn.text', { n: affectedCount })}</span>
+          <button
+            type="button"
+            onClick={() => setLayersOn({ alerts: false, quakes: false })}
+            aria-label={t('common.dismiss')}
+          >
             ×
           </button>
         </div>
@@ -295,7 +289,6 @@ export default function App() {
         >
           <ResultsList
             status={status}
-            notice={notice}
             resources={annotated}
             activeId={activeId}
             onSelect={(id) => setActiveId((prev) => (prev === id ? null : id))}

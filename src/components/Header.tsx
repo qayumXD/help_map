@@ -1,8 +1,12 @@
+﻿import LanguageSwitcher from './LanguageSwitcher'
+import { useT } from '../i18n/useT'
+
 interface Props {
   onPrivacy: () => void
 }
 
 export default function Header({ onPrivacy }: Props) {
+  const { t } = useT()
   return (
     <header className="header">
       <div className="logo">
@@ -20,10 +24,13 @@ export default function Header({ onPrivacy }: Props) {
         </svg>
         <span className="logo-name">HelpMap</span>
       </div>
-      <p className="tagline">Free food, shelter, care &amp; support near you</p>
-      <button type="button" className="privacy-link" onClick={onPrivacy}>
-        Privacy
-      </button>
+      <p className="tagline">{t('app.tagline')}</p>
+      <div className="header-actions">
+        <LanguageSwitcher />
+        <button type="button" className="privacy-link" onClick={onPrivacy}>
+          {t('header.privacy')}
+        </button>
+      </div>
     </header>
   )
 }

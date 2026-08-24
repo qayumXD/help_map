@@ -1,7 +1,8 @@
-import type { LayerId } from '../types'
+﻿import type { LayerId } from '../types'
 import { LAYERS } from '../types'
 import type { LayerStatus } from '../hooks/useLiveLayer'
 import { timeAgo } from '../utils/geo'
+import { useT } from '../i18n/useT'
 
 export interface LayerChip {
   enabled: boolean
@@ -20,11 +21,13 @@ interface Props {
 }
 
 export default function LayersBar({ chips, onToggle, onRefresh, now }: Props) {
+  const { t } = useT()
   return (
-    <div className="layers-row" role="group" aria-label="Live data layers">
-      <span className="layers-label">Live</span>
+    <div className="layers-row" role="group" aria-label={t('layers.live')}>
+      <span className="layers-label">{t('layers.live')}</span>
       {LAYERS.map((meta) => {
         const chip = chips[meta.id]
+        const label = t(`layers.${meta.id}`)
         const stateClass = !chip.enabled
           ? 'layer-off'
           : chip.status === 'error'
@@ -42,7 +45,7 @@ export default function LayersBar({ chips, onToggle, onRefresh, now }: Props) {
               title={chip.error ?? undefined}
             >
               <span className="layer-dot" aria-hidden="true" />
-              <span>{meta.label}</span>
+              <span>{label}</span>
               <span className="chip-count">{chip.count}</span>
             </button>
             <button
@@ -50,7 +53,7 @@ export default function LayersBar({ chips, onToggle, onRefresh, now }: Props) {
               className="layer-refresh"
               onClick={() => onRefresh(meta.id)}
               disabled={!chip.enabled}
-              aria-label={`Refresh ${meta.label}`}
+              aria-label={t('layers.refresh', { label })}
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
                 <path d="M21 12a9 9 0 1 1-2.64-6.36" />
@@ -59,7 +62,7 @@ export default function LayersBar({ chips, onToggle, onRefresh, now }: Props) {
             </button>
             <span className="layer-time">
               {chip.enabled && chip.status === 'loading' && chip.updatedAt === null
-                ? 'loading…'
+                ? t('layers.loading')
                 : chip.enabled && chip.updatedAt !== null
                   ? timeAgo(chip.updatedAt, now)
                   : ''}

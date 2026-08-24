@@ -1,4 +1,5 @@
-import { CATEGORIES } from '../data/categories'
+﻿import { CATEGORIES } from '../data/categories'
+import { useT } from '../i18n/useT'
 import CategoryIcon from './CategoryIcon'
 
 interface Props {
@@ -9,8 +10,9 @@ interface Props {
 }
 
 export default function FilterChips({ active, counts, total, onToggle }: Props) {
+  const { t } = useT()
   return (
-    <div className="chips-row" role="group" aria-label="Filter by category">
+    <div className="chips-row" role="group" aria-label={t('chips.label')}>
       {CATEGORIES.map((cat) => {
         const isActive = active.has(cat.id)
         const count = counts.get(cat.id) ?? 0
@@ -23,13 +25,13 @@ export default function FilterChips({ active, counts, total, onToggle }: Props) 
             aria-pressed={isActive}
           >
             <CategoryIcon id={cat.id} size={14} />
-            <span>{cat.label}</span>
+            <span>{t(`cat.${cat.id}`)}</span>
             <span className="chip-count">{count}</span>
           </button>
         )
       })}
       <span className="chips-total" aria-live="polite">
-        {total} shown
+        {t('chips.shown', { total })}
       </span>
     </div>
   )
