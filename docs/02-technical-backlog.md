@@ -94,7 +94,7 @@ Public instances degraded simultaneously during session testing (502/504).
 - Verified integration: Leaflet TileLayer against `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/{layer}/default/{date}/GoogleMapsCompatible_Level{N}/{z}/{y}/{x}.{ext}`.
 - **Shipped 2026-08-24:** true-color VIIRS imagery basemap toggle (verified live against WMTSCapabilities + real tile fetch), NASA attribution, SW caching. **Deferred as T17b:** fires overlay — all GIBS Thermal_Anomalies layers are Mapbox vector tiles (.mvt), needs Leaflet.VectorGrid spike.
 
-### T18 ☐ Additional hazard/data integrations
+### T18 ◐ Additional hazard/data integrations
 Priority order: GDACS global alerts → healthsites.io health facilities → Open-Meteo AQ index chip → FIRMS hotspots (needs free MAP_KEY) → FEMA declarations.
 
 ---

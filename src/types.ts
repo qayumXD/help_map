@@ -51,7 +51,7 @@ export interface WeatherAlert {
   polygon?: [number, number][]
 }
 
-export type LayerId = 'quakes' | 'alerts'
+export type LayerId = 'quakes' | 'alerts' | 'eonet'
 
 export interface LayerMeta {
   id: LayerId
@@ -61,4 +61,15 @@ export interface LayerMeta {
 export const LAYERS: LayerMeta[] = [
   { id: 'alerts', refreshMs: 5 * 60_000 },
   { id: 'quakes', refreshMs: 10 * 60_000 },
+  { id: 'eonet', refreshMs: 30 * 60_000 },
 ]
+
+export interface GlobalEvent {
+  id: string
+  title: string
+  category: string
+  dateMs: number
+  lat: number
+  lng: number
+  link: string
+}

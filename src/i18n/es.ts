@@ -26,6 +26,8 @@ const es: Dict = {
   'layers.alerts': 'Alertas meteorológicas',
   'layers.quakes': 'Terremotos',
   'layers.imagery': 'Satélite',
+  'layers.eonet': 'Eventos globales',
+  'event.details': 'Detalles del evento',
   'layers.loading': 'cargando…',
   'layers.refresh': 'Actualizar {label}',
 

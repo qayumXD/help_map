@@ -1241,6 +1241,16 @@ a:focus-visible,
     0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
+.hm-event {
+  display: block;
+  width: 12px;
+  height: 12px;
+  transform: rotate(45deg);
+  background: color-mix(in srgb, var(--pin, #7a4fd0) 75%, transparent);
+  border: 2px solid var(--pin, #7a4fd0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
 .popup-muted {
   color: var(--muted);
   font-size: 12px;

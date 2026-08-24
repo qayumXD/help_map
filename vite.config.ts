@@ -55,6 +55,14 @@ export default defineConfig({
             },
           },
           {
+            urlPattern: /^https:\/\/eonet\.gsfc\.nasa\.gov\/.*/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'eonet-cache',
+              expiration: { maxEntries: 20, maxAgeSeconds: 600 },
+            },
+          },
+          {
             urlPattern: /^https:\/\/earthquake\.usgs\.gov\/.*/i,
             handler: 'NetworkFirst',
             options: {

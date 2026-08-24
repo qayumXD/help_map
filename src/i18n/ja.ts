@@ -1,4 +1,4 @@
-﻿import type { Dict } from './en'
+import type { Dict } from './en'
 
 const ja: Dict = {
   'app.tagline': '近くの無料の食べ物・宿所・医療・支援',
@@ -26,6 +26,8 @@ const ja: Dict = {
   'layers.alerts': '気象警報',
   'layers.quakes': '地震',
   'layers.imagery': '衛星画像',
+  'layers.eonet': '世界の災害',
+  'event.details': '詳細を見る',
   'layers.loading': '読み込み中…',
   'layers.refresh': '{label}を更新',
 

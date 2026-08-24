@@ -1,11 +1,12 @@
 import { useCallback, useMemo, useState } from 'react'
-import type { LatLng, LayerId, Quake, Resource, WeatherAlert } from './types'
+import type { GlobalEvent, LatLng, LayerId, Quake, Resource, WeatherAlert } from './types'
 import { LAYERS } from './types'
 import { CATEGORIES } from './data/categories'
 import { currentPosition, geocodeAddress, reverseLabel } from './services/geocode'
 import { fetchResources } from './services/overpass'
 import { fetchQuakes } from './services/quakes'
 import { fetchAlerts } from './services/alerts'
+import { fetchGlobalEvents } from './services/eonet'
 import { annotateResources } from './utils/impact'
 import { getOpenState } from './utils/openingHours'
 import { CACHE_KEYS, loadCache, saveCache } from './utils/cache'
@@ -69,6 +70,7 @@ export default function App() {
   const [layersOn, setLayersOn] = useState<Record<LayerId, boolean>>({
     alerts: true,
     quakes: true,
+    eonet: true,
   })
   const [privacyOpen, setPrivacyOpen] = useState(false)
   const [imageryOn, setImageryOn] = useState(false)
@@ -123,6 +125,14 @@ export default function App() {
     fetcher: () => (position ? fetchAlerts(position) : Promise.resolve([])),
     intervalMs: REFRESH_MS.alerts,
     cacheKey: CACHE_KEYS.alerts,
+  })
+
+  const eventsLayer = useLiveLayer<GlobalEvent>({
+    enabled: position !== null && layersOn.eonet,
+    resetKey: posKey,
+    fetcher: () => (position ? fetchGlobalEvents(position) : Promise.resolve([])),
+    intervalMs: REFRESH_MS.eonet,
+    cacheKey: CACHE_KEYS.eonet,
   })
 
   const now = useTick(30_000)
@@ -248,6 +258,16 @@ export default function App() {
         now - alertsLayer.updatedAt > REFRESH_MS.alerts * 2.5,
       count: alertsLayer.items.filter((a) => a.polygon).length,
     },
+    eonet: {
+      enabled: layersOn.eonet && position !== null,
+      status: eventsLayer.status,
+      updatedAt: eventsLayer.updatedAt,
+      error: eventsLayer.error,
+      stale:
+        eventsLayer.updatedAt !== null &&
+        now - eventsLayer.updatedAt > REFRESH_MS.eonet * 2.5,
+      count: eventsLayer.items.length,
+    },
   }
 
   const toggleLayer = useCallback((id: LayerId) => {
@@ -326,7 +346,7 @@ export default function App() {
           <span>{t('warn.text', { n: affectedCount })}</span>
           <button
             type="button"
-            onClick={() => setLayersOn({ alerts: false, quakes: false })}
+            onClick={() => setLayersOn({ alerts: false, quakes: false, eonet: false })}
             aria-label={t('common.dismiss')}
           >
             ×
@@ -366,6 +386,8 @@ export default function App() {
             alerts={alertsLayer.items}
             showImagery={imageryOn}            showQuakes={layersOn.quakes && position !== null}
             showAlerts={layersOn.alerts && position !== null}
+            globalEvents={eventsLayer.items}
+            showEvents={layersOn.eonet && position !== null}
           />
         </section>
       </main>

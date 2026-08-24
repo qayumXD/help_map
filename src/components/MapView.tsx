@@ -2,9 +2,10 @@
 import { MapContainer, Marker, Polygon, Popup, TileLayer, Tooltip, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import type { AlertSeverity, LatLng, Quake, Resource, WeatherAlert } from '../types'
+import type { AlertSeverity, GlobalEvent, LatLng, Quake, Resource, WeatherAlert } from '../types'
 import { CATEGORY_BY_ID } from '../data/categories'
 import { isActive } from '../services/alerts'
+import { eventColor } from '../services/eonet'
 import {
   GIBS_BASE,
   GIBS_IMAGERY_LAYER,
@@ -26,6 +27,8 @@ interface Props {
   showQuakes: boolean
   showAlerts: boolean
   showImagery: boolean
+  globalEvents: GlobalEvent[]
+  showEvents: boolean
 }
 
 function pinIcon(color: string, active: boolean): L.DivIcon {
@@ -34,6 +37,15 @@ function pinIcon(color: string, active: boolean): L.DivIcon {
     html: `<span class="hm-pin${active ? ' hm-pin-active' : ''}" style="--pin:${color}"></span>`,
     iconSize: [20, 20],
     iconAnchor: [10, 10],
+  })
+}
+
+function eventIcon(color: string): L.DivIcon {
+  return L.divIcon({
+    className: 'hm-pin-wrap',
+    html: `<span class="hm-event" style="--pin:${color}"></span>`,
+    iconSize: [14, 14],
+    iconAnchor: [7, 7],
   })
 }
 
@@ -118,6 +130,8 @@ export default function MapView({
   showQuakes,
   showAlerts,
   showImagery,
+  globalEvents,
+  showEvents,
 }: Props) {
   const visibleAlerts = useMemo(
     () => (showAlerts ? alerts.filter((a) => a.polygon && isActive(a)) : []),
@@ -207,6 +221,29 @@ export default function MapView({
           </Popup>
         </Marker>
       ))}
+
+      {showEvents &&
+        globalEvents.map((ev) => (
+          <Marker
+            key={`event-${ev.id}`}
+            position={[ev.lat, ev.lng]}
+            icon={eventIcon(eventColor(ev.category))}
+          >
+            <Popup>
+              <strong>{ev.title}</strong>
+              <br />
+              <span className="popup-muted">{timeAgo(ev.dateMs)} · NASA EONET</span>
+              {ev.link && (
+                <>
+                  <br />
+                  <a href={ev.link} target="_blank" rel="noopener noreferrer">
+                    {t('event.details')}
+                  </a>
+                </>
+              )}
+            </Popup>
+          </Marker>
+        ))}
     </MapContainer>
   )
 }

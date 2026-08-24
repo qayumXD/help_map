@@ -20,4 +20,5 @@ export const CACHE_KEYS = {
   resources: 'hm:resources',
   quakes: 'hm:quakes',
   alerts: 'hm:alerts',
+  eonet: 'hm:eonet',
 } as const
