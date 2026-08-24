@@ -11,3 +11,9 @@ export const TILE_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 
 export const NOMINATIM_BASE = import.meta.env.VITE_NOMINATIM_BASE ?? 'https://nominatim.openstreetmap.org'
+
+/** NASA EOSDIS GIBS — free daily satellite imagery, EPSG:3857 WMTS. */
+export const GIBS_BASE = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best'
+export const GIBS_IMAGERY_LAYER = 'VIIRS_SNPP_CorrectedReflectance_TrueColor'
+export const GIBS_MATRIX_SET = 'GoogleMapsCompatible_Level9'
+export const GIBS_MAX_NATIVE_ZOOM = 9

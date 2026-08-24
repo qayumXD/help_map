@@ -18,9 +18,11 @@ interface Props {
   onToggle: (id: LayerId) => void
   onRefresh: (id: LayerId) => void
   now: number
+  imageryOn: boolean
+  onToggleImagery: () => void
 }
 
-export default function LayersBar({ chips, onToggle, onRefresh, now }: Props) {
+export default function LayersBar({ chips, onToggle, onRefresh, now, imageryOn, onToggleImagery }: Props) {
   const { t } = useT()
   return (
     <div className="layers-row" role="group" aria-label={t('layers.live')} tabIndex={0}>
@@ -70,6 +72,19 @@ export default function LayersBar({ chips, onToggle, onRefresh, now }: Props) {
           </div>
         )
       })}
+      <button
+        type="button"
+        className={`layer-chip layer-static ${imageryOn ? 'imagery-on' : ''}`}
+        onClick={onToggleImagery}
+        aria-pressed={imageryOn}
+        title={t('layers.imagery')}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.5" />
+          <path d="M4.9 4.9a10 10 0 0 0 0 14.2M19.1 19.1a10 10 0 0 0 0-14.2" />
+        </svg>
+        <span>{t('layers.imagery')}</span>
+      </button>
     </div>
   )
 }

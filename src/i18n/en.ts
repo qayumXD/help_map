@@ -1,4 +1,4 @@
-﻿export const en = {
+export const en = {
   'app.tagline': 'Free food, shelter, care & support near you',
   'header.privacy': 'Privacy',
 
@@ -23,6 +23,7 @@
   'layers.live': 'Live',
   'layers.alerts': 'Weather alerts',
   'layers.quakes': 'Earthquakes',
+  'layers.imagery': 'Satellite',
   'layers.loading': 'loading…',
   'layers.refresh': 'Refresh {label}',
 

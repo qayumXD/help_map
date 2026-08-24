@@ -1,4 +1,4 @@
-﻿import type { Dict } from './en'
+import type { Dict } from './en'
 
 const es: Dict = {
   'app.tagline': 'Comida, refugio, salud y apoyo gratuitos cerca de ti',
@@ -25,6 +25,7 @@ const es: Dict = {
   'layers.live': 'En vivo',
   'layers.alerts': 'Alertas meteorológicas',
   'layers.quakes': 'Terremotos',
+  'layers.imagery': 'Satélite',
   'layers.loading': 'cargando…',
   'layers.refresh': 'Actualizar {label}',
 

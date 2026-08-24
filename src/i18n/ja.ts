@@ -25,6 +25,7 @@ const ja: Dict = {
   'layers.live': 'ライブ',
   'layers.alerts': '気象警報',
   'layers.quakes': '地震',
+  'layers.imagery': '衛星画像',
   'layers.loading': '読み込み中…',
   'layers.refresh': '{label}を更新',
 

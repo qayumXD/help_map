@@ -5,7 +5,14 @@ import 'leaflet/dist/leaflet.css'
 import type { AlertSeverity, LatLng, Quake, Resource, WeatherAlert } from '../types'
 import { CATEGORY_BY_ID } from '../data/categories'
 import { isActive } from '../services/alerts'
-import { TILE_ATTRIBUTION, TILE_URL } from '../config'
+import {
+  GIBS_BASE,
+  GIBS_IMAGERY_LAYER,
+  GIBS_MATRIX_SET,
+  GIBS_MAX_NATIVE_ZOOM,
+  TILE_ATTRIBUTION,
+  TILE_URL,
+} from '../config'
 import { timeAgo } from '../utils/geo'
 import { useT } from '../i18n/useT'
 
@@ -18,6 +25,7 @@ interface Props {
   alerts: WeatherAlert[]
   showQuakes: boolean
   showAlerts: boolean
+  showImagery: boolean
 }
 
 function pinIcon(color: string, active: boolean): L.DivIcon {
@@ -28,6 +36,13 @@ function pinIcon(color: string, active: boolean): L.DivIcon {
     iconAnchor: [10, 10],
   })
 }
+
+const IMAGERY_DATE = (() => {
+  const d = new Date(Date.now() - 86_400_000)
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  const dd = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}-${mm}-${dd}`
+})()
 
 function quakeIcon(mag: number): L.DivIcon {
   const size = Math.round(12 + mag * 3.5)
@@ -102,6 +117,7 @@ export default function MapView({
   alerts,
   showQuakes,
   showAlerts,
+  showImagery,
 }: Props) {
   const visibleAlerts = useMemo(
     () => (showAlerts ? alerts.filter((a) => a.polygon && isActive(a)) : []),
@@ -127,10 +143,21 @@ export default function MapView({
       className="hm-map"
       attributionControl={true}
     >
-      <TileLayer
-        attribution={TILE_ATTRIBUTION}
-        url={TILE_URL}
-      />
+      {showImagery ? (
+        <TileLayer
+          key="gibs-imagery"
+          url={`${GIBS_BASE}/${GIBS_IMAGERY_LAYER}/default/${IMAGERY_DATE}/${GIBS_MATRIX_SET}/{z}/{y}/{x}.jpg`}
+          attribution='Imagery &copy; <a href="https://earthdata.nasa.gov/gibs">NASA EOSDIS GIBS</a> / VIIRS'
+          maxNativeZoom={GIBS_MAX_NATIVE_ZOOM}
+          maxZoom={19}
+        />
+      ) : (
+        <TileLayer
+          key="osm-standard"
+          attribution={TILE_ATTRIBUTION}
+          url={TILE_URL}
+        />
+      )}
       <AutoResize />
       <Follow position={position} />
       <FitToResults resources={resources} />

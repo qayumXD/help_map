@@ -47,6 +47,14 @@ export default defineConfig({
             },
           },
           {
+            urlPattern: /^https:\/\/gibs\.earthdata\.nasa\.gov\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'gibs-tiles',
+              expiration: { maxEntries: 800, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
+          {
             urlPattern: /^https:\/\/earthquake\.usgs\.gov\/.*/i,
             handler: 'NetworkFirst',
             options: {

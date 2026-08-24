@@ -1165,6 +1165,17 @@ a:focus-visible,
   white-space: nowrap;
 }
 
+.layer-static {
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.layer-static.imagery-on {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
 /* ---------- Info & warning banners ---------- */
 
 .banner-info {

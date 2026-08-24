@@ -71,6 +71,7 @@ export default function App() {
     quakes: true,
   })
   const [privacyOpen, setPrivacyOpen] = useState(false)
+  const [imageryOn, setImageryOn] = useState(false)
   const [openOnly, setOpenOnly] = useState(false)
   const [emergency, setEmergency] = useState(
     () => localStorage.getItem('hm:emergency') === '1',
@@ -289,6 +290,8 @@ export default function App() {
             <LayersBar
               chips={layerChips}
               now={now}
+              imageryOn={imageryOn}
+              onToggleImagery={() => setImageryOn((v) => !v)}
               onToggle={toggleLayer}
               onRefresh={(id) => (id === 'quakes' ? quakesLayer.refresh() : alertsLayer.refresh())}
             />
@@ -361,7 +364,7 @@ export default function App() {
             onSelect={(id) => setActiveId((prev) => (prev === id ? null : id))}
             quakes={quakesLayer.items}
             alerts={alertsLayer.items}
-            showQuakes={layersOn.quakes && position !== null}
+            showImagery={imageryOn}            showQuakes={layersOn.quakes && position !== null}
             showAlerts={layersOn.alerts && position !== null}
           />
         </section>
