@@ -21,6 +21,8 @@ interface Props {
   now: number
   imageryOn: boolean
   onToggleImagery: () => void
+  firesOn: boolean
+  onToggleFires: () => void
   aqi?: { usAqi: number } | null
 }
 
@@ -31,6 +33,8 @@ export default function LayersBar({
   now,
   imageryOn,
   onToggleImagery,
+  firesOn,
+  onToggleFires,
   aqi,
 }: Props) {
   const { t } = useT()
@@ -94,6 +98,18 @@ export default function LayersBar({
           <path d="M4.9 4.9a10 10 0 0 0 0 14.2M19.1 19.1a10 10 0 0 0 0-14.2" />
         </svg>
         <span>{t('layers.imagery')}</span>
+      </button>
+      <button
+        type="button"
+        className={`layer-chip layer-static ${firesOn ? 'imagery-on' : ''}`}
+        onClick={onToggleFires}
+        aria-pressed={firesOn}
+        title={t('layers.fires')}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M12 22c4.4 0 7-2.8 7-6.5 0-3-2-5-3.5-6.5C14 7.5 13 5.5 13 2c-3 2-5.5 5-5.5 8.5 0 .8.1 1.6.3 2.3C6.6 11.9 5.9 10.6 5.7 9 4.6 10.4 4 12.1 4 13.9 4 18.7 7.6 22 12 22z" />
+        </svg>
+        <span>{t('layers.fires')}</span>
       </button>
       {aqi && (
         <span

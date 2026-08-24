@@ -24,6 +24,7 @@ export const en = {
   'layers.alerts': 'Weather alerts',
   'layers.quakes': 'Earthquakes',
   'layers.imagery': 'Satellite',
+  'layers.fires': 'Active fires',
   'layers.eonet': 'Global events',
   'event.details': 'Event details',
   'layers.loading': 'loading…',

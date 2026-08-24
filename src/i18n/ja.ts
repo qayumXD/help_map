@@ -26,6 +26,7 @@ const ja: Dict = {
   'layers.alerts': '気象警報',
   'layers.quakes': '地震',
   'layers.imagery': '衛星画像',
+  'layers.fires': '火災検知',
   'layers.eonet': '世界の災害',
   'event.details': '詳細を見る',
   'layers.loading': '読み込み中…',

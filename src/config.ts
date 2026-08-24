@@ -18,6 +18,10 @@ export const GIBS_IMAGERY_LAYER = 'VIIRS_SNPP_CorrectedReflectance_TrueColor'
 export const GIBS_MATRIX_SET = 'GoogleMapsCompatible_Level9'
 export const GIBS_MAX_NATIVE_ZOOM = 9
 
+/** Active fire detections (MODIS Terra+Aqua combined), served as raster via WMS. */
+export const GIBS_WMS_URL = `${GIBS_BASE.replace(/\/wmts\/.*$/, '')}/wms/epsg3857/best/wms.cgi`
+export const GIBS_FIRES_LAYER = 'MODIS_Combined_Thermal_Anomalies_All'
+
 /** Imagery date: yesterday (today's global mosaic is incomplete until end of day). */
 export const IMAGERY_DATE = (() => {
   const d = new Date(Date.now() - 86_400_000)

@@ -79,6 +79,7 @@ export default function App() {
   })
   const [privacyOpen, setPrivacyOpen] = useState(false)
   const [imageryOn, setImageryOn] = useState(false)
+  const [firesOn, setFiresOn] = useState(false)
   const [aqi, setAqi] = useState<AirQuality | null>(null)
   const [showStatus, setShowStatus] = useState(
     () => typeof window !== 'undefined' && window.location.hash === '#status',
@@ -419,6 +420,8 @@ export default function App() {
               now={now}
               imageryOn={imageryOn}
               onToggleImagery={() => setImageryOn((v) => !v)}
+              firesOn={firesOn}
+              onToggleFires={() => setFiresOn((v) => !v)}
               aqi={aqi}
               onToggle={toggleLayer}
               onRefresh={(id) => (id === 'quakes' ? quakesLayer.refresh() : alertsLayer.refresh())}
@@ -496,6 +499,7 @@ export default function App() {
             showAlerts={layersOn.alerts && position !== null}
             globalEvents={eventsLayer.items}
             showEvents={layersOn.eonet && position !== null}
+            showFires={firesOn}
           />
         </section>
       </main>

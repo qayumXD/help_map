@@ -8,9 +8,11 @@ import { isActive } from '../services/alerts'
 import { eventColor } from '../services/eonet'
 import {
   GIBS_BASE,
+  GIBS_FIRES_LAYER,
   GIBS_IMAGERY_LAYER,
   GIBS_MATRIX_SET,
   GIBS_MAX_NATIVE_ZOOM,
+  GIBS_WMS_URL,
   IMAGERY_DATE,
   TILE_ATTRIBUTION,
   TILE_URL,
@@ -30,6 +32,7 @@ interface Props {
   showImagery: boolean
   globalEvents: GlobalEvent[]
   showEvents: boolean
+  showFires: boolean
 }
 
 function pinIcon(color: string, active: boolean): L.DivIcon {
@@ -114,6 +117,28 @@ function FlyToActive({ resource }: { resource: Resource | undefined }) {
   return null
 }
 
+function FiresLayer() {
+  const map = useMap()
+  useEffect(() => {
+    const wmsOpts = {
+      layers: GIBS_FIRES_LAYER,
+      format: 'image/png',
+      transparent: true,
+      version: '1.1.1',
+      time: IMAGERY_DATE,
+      opacity: 0.9,
+      attribution:
+        'Fires &copy; <a href="https://earthdata.nasa.gov/gibs">NASA EOSDIS GIBS</a>',
+    }
+    const tl = L.tileLayer.wms(GIBS_WMS_URL, wmsOpts as L.WMSOptions)
+    tl.addTo(map)
+    return () => {
+      map.removeLayer(tl)
+    }
+  }, [map])
+  return null
+}
+
 export default function MapView({
   position,
   resources,
@@ -126,6 +151,7 @@ export default function MapView({
   showImagery,
   globalEvents,
   showEvents,
+  showFires,
 }: Props) {
   const visibleAlerts = useMemo(
     () => (showAlerts ? alerts.filter((a) => a.polygon && isActive(a)) : []),
@@ -170,6 +196,7 @@ export default function MapView({
       <Follow position={position} />
       <FitToResults resources={resources} />
       <FlyToActive resource={activeResource} />
+      {showFires && <FiresLayer />}
 
       {visibleAlerts.map((a) => (
         <Polygon
